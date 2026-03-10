@@ -1,8 +1,18 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     id("com.google.gms.google-services")
 }
+
+val localProps = Properties().also { props ->
+    val f = rootProject.file("local.properties")
+    if (f.exists()) props.load(f.inputStream())
+}
+
+fun localOrEnv(localKey: String, envKey: String): String =
+    localProps.getProperty(localKey) ?: System.getenv(envKey) ?: ""
 
 android {
     namespace = "com.lua.dsbcafe"
@@ -23,10 +33,10 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file(System.getenv("KEYSTORE_PATH") ?: "dsb-cafe-release.jks")
-            storePassword = System.getenv("KEYSTORE_PASSWORD") ?: ""
-            keyAlias = System.getenv("KEY_ALIAS") ?: ""
-            keyPassword = System.getenv("KEY_PASSWORD") ?: ""
+            storeFile = file(localOrEnv("keystore.path", "KEYSTORE_PATH").ifEmpty { "dsb-cafe-release.jks" })
+            storePassword = localOrEnv("keystore.password", "KEYSTORE_PASSWORD")
+            keyAlias = localOrEnv("key.alias", "KEY_ALIAS")
+            keyPassword = localOrEnv("key.password", "KEY_PASSWORD")
         }
     }
 
