@@ -1,0 +1,41 @@
+exclude: ^(.idea|node_modules|dist|build|coverage|\.next|\.nuxt)
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: check-added-large-files
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: check-toml
+      - id: check-yaml
+        args: ["--unsafe"]
+      - id: trailing-whitespace
+
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.11.0.1
+    hooks:
+      - id: shellcheck
+        exclude: ^gradlew$
+
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.38.0
+    hooks:
+      - id: yamllint
+        args: [-d, relaxed]
+
+  - repo: local
+    hooks:
+      - id: ktlint
+        name: ktlint
+        entry: ./gradlew ktlintCheck
+        language: system
+        types: [kotlin]
+        pass_filenames: false
+        exclude: ^(gradlew\.bat|.*\.gradle\.kts)$
+      - id: detekt
+        name: detekt
+        entry: ./gradlew detekt
+        language: system
+        types: [kotlin]
+        pass_filenames: false

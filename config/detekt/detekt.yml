@@ -1,0 +1,8 @@
+build:
+  maxIssues: 1000
+  excludeCorrectable: false
+
+style:
+  MaxLineLength:
+    active: true
+    maxLineLength: 80
