@@ -13,6 +13,8 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.StarBorder
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -28,7 +30,9 @@ import androidx.compose.ui.zIndex
 @Composable
 fun AdminMenu(
     isExpanded: Boolean,
+    isExpertMode: Boolean,
     onToggle: () -> Unit,
+    onToggleExpertMode: () -> Unit,
     onReset: () -> Unit,
     onEmail: () -> Unit,
     onDelete: () -> Unit,
@@ -48,8 +52,17 @@ fun AdminMenu(
                 AdminAction(label = "Delete user", onClick = onDelete) {
                     Icon(Icons.Default.Delete, contentDescription = "Delete user")
                 }
-                AdminAction(label = "Add a coffee", onClick = onIncrement) {
-                    Icon(Icons.Default.Add, contentDescription = "Add a coffee")
+                AdminAction(
+                    label = if (isExpertMode) "Expert mode: ON" else "Expert mode: OFF",
+                    onClick = onToggleExpertMode
+                ) {
+                    Icon(
+                        imageVector = if (isExpertMode) Icons.Default.Star else Icons.Default.StarBorder,
+                        contentDescription = "Toggle expert mode"
+                    )
+                }
+                AdminAction(label = "Manual edit", onClick = onIncrement) {
+                    Icon(Icons.Default.Add, contentDescription = "Manual edit")
                 }
                 AdminAction(label = "Send statistics", onClick = onEmail) {
                     Icon(Icons.Default.Email, contentDescription = "Send statistics email")

@@ -21,7 +21,7 @@ sealed interface DialogState {
     data class DoubleShot(val badgeId: String, val person: Person) : DialogState
     data class NameInput(val badgeId: String) : DialogState
     data object DeleteUser : DialogState
-    data object IncrementCount : DialogState
+    data object ManualEdit : DialogState
 }
 
 sealed interface UiMessage {
@@ -48,6 +48,9 @@ class MainViewModel : ViewModel() {
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
+    private val _isExpertMode = MutableStateFlow(false)
+    val isExpertMode: StateFlow<Boolean> = _isExpertMode.asStateFlow()
 
     fun onNfcTagRead(badgeId: String) {
         viewModelScope.launch {
@@ -105,20 +108,36 @@ class MainViewModel : ViewModel() {
         _dialogState.value = DialogState.DeleteUser
     }
 
-    fun showIncrementCountDialog() {
-        _dialogState.value = DialogState.IncrementCount
+    fun showManualEditDialog() {
+        _dialogState.value = DialogState.ManualEdit
     }
 
-    fun incrementCount(name: String) {
+    fun toggleExpertMode() {
+        _isExpertMode.value = !_isExpertMode.value
+    }
+
+    fun incrementCount(badgeId: String) {
         viewModelScope.launch {
             try {
-                val person = persons.value.find { it.name == name } ?: return@launch
+                val person = persons.value.find { it.badgeId == badgeId } ?: return@launch
                 repository.save(person.copy(coffeeCount = person.coffeeCount + 1))
                 _message.value = UiMessage.Info("Added a coffee for ${person.name}.")
             } catch (e: Exception) {
                 _message.value = UiMessage.Error("Failed to increment: ${e.message}")
-            } finally {
-                _dialogState.value = DialogState.None
+            }
+        }
+    }
+
+    fun decrementCount(badgeId: String) {
+        viewModelScope.launch {
+            try {
+                val person = persons.value.find { it.badgeId == badgeId } ?: return@launch
+                if (person.coffeeCount > 0) {
+                    repository.save(person.copy(coffeeCount = person.coffeeCount - 1))
+                    _message.value = UiMessage.Info("Removed a coffee for ${person.name}.")
+                }
+            } catch (e: Exception) {
+                _message.value = UiMessage.Error("Failed to decrement: ${e.message}")
             }
         }
     }

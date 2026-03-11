@@ -53,7 +53,7 @@ import com.lua.dsbcafe.ui.components.AdminMenu
 import com.lua.dsbcafe.ui.components.PersonItem
 import com.lua.dsbcafe.ui.components.dialogs.DeleteUserDialog
 import com.lua.dsbcafe.ui.components.dialogs.DoubleDialog
-import com.lua.dsbcafe.ui.components.dialogs.IncrementCountDialog
+import com.lua.dsbcafe.ui.components.dialogs.ManualEditDialog
 import com.lua.dsbcafe.ui.components.dialogs.NameInputDialog
 import com.lua.dsbcafe.viewmodel.DialogState
 import com.lua.dsbcafe.viewmodel.MainViewModel
@@ -76,6 +76,7 @@ fun MainScreen(
     val dialogState by viewModel.dialogState.collectAsState()
     val message by viewModel.message.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+    val isExpertMode by viewModel.isExpertMode.collectAsState()
 
     var adminExpanded by remember { mutableStateOf(false) }
     var tapCount by remember { mutableIntStateOf(0) }
@@ -139,6 +140,7 @@ fun MainScreen(
                     1 -> LeaderboardPage(
                         persons = persons,
                         isLoading = isLoading,
+                        onDoubleTap = { badgeId -> viewModel.incrementCount(badgeId) },
                     )
                 }
             }
@@ -191,7 +193,9 @@ fun MainScreen(
             if (adminExpanded) {
                 AdminMenu(
                     isExpanded = adminExpanded,
+                    isExpertMode = isExpertMode,
                     onToggle = { adminExpanded = !adminExpanded },
+                    onToggleExpertMode = { viewModel.toggleExpertMode() },
                     onReset = {
                         adminExpanded = false
                         viewModel.resetCounts()
@@ -206,7 +210,7 @@ fun MainScreen(
                     },
                     onIncrement = {
                         adminExpanded = false
-                        viewModel.showIncrementCountDialog()
+                        viewModel.showManualEditDialog()
                     },
                     modifier = Modifier.align(Alignment.BottomEnd),
                 )
@@ -229,9 +233,11 @@ fun MainScreen(
             onConfirm = { name -> viewModel.deleteUser(name) },
             onDismiss = { viewModel.dismissDialog() },
         )
-        is DialogState.IncrementCount -> IncrementCountDialog(
+        is DialogState.ManualEdit -> ManualEditDialog(
             persons = persons,
-            onConfirm = { name -> viewModel.incrementCount(name) },
+            isExpertMode = isExpertMode,
+            onIncrement = { badgeId -> viewModel.incrementCount(badgeId) },
+            onDecrement = { badgeId -> viewModel.decrementCount(badgeId) },
             onDismiss = { viewModel.dismissDialog() },
         )
         DialogState.None -> Unit
@@ -283,6 +289,7 @@ private fun SummaryPage(
 private fun LeaderboardPage(
     persons: List<com.lua.dsbcafe.data.model.Person>,
     isLoading: Boolean,
+    onDoubleTap: (String) -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -315,7 +322,10 @@ private fun LeaderboardPage(
                     items = persons,
                     key = { it.badgeId },
                 ) { person ->
-                    PersonItem(person = person)
+                    PersonItem(
+                        person = person,
+                        onDoubleTap = { onDoubleTap(person.badgeId) },
+                    )
                     HorizontalDivider()
                 }
             }
