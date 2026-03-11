@@ -64,7 +64,3 @@ val OnSurfaceVariantDark = Color(0xFFC6C5D0)
 val OutlineDark = Color(0xFF90909A)
 val OutlineVariantDark = Color(0xFF45464F)
 
-// Rank badge colors
-val RankGold = Color(0xFFFFD700)
-val RankSilver = Color(0xFFC0C0C0)
-val RankBronze = Color(0xFFCD7F32)

@@ -1,12 +1,23 @@
 package com.lua.dsbcafe.ui.screen
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -42,6 +53,7 @@ import com.lua.dsbcafe.ui.components.AdminMenu
 import com.lua.dsbcafe.ui.components.PersonItem
 import com.lua.dsbcafe.ui.components.dialogs.DeleteUserDialog
 import com.lua.dsbcafe.ui.components.dialogs.DoubleDialog
+import com.lua.dsbcafe.ui.components.dialogs.IncrementCountDialog
 import com.lua.dsbcafe.ui.components.dialogs.NameInputDialog
 import com.lua.dsbcafe.viewmodel.DialogState
 import com.lua.dsbcafe.viewmodel.MainViewModel
@@ -67,6 +79,8 @@ fun MainScreen(
 
     var adminExpanded by remember { mutableStateOf(false) }
     var tapCount by remember { mutableIntStateOf(0) }
+
+    val pagerState = rememberPagerState(pageCount = { 2 })
 
     LaunchedEffect(message) {
         message?.let {
@@ -125,74 +139,74 @@ fun MainScreen(
                 .fillMaxSize()
                 .padding(padding),
         ) {
-            Column(modifier = Modifier.fillMaxSize()) {
-                // Total count — long-press to unlock admin menu
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(vertical = 24.dp)
-                        .pointerInput(Unit) {
-                            detectTapGestures(
-                                onTap = {
-                                    tapCount++
-                                    if (tapCount >= 5) {
-                                        adminExpanded = !adminExpanded
-                                        tapCount = 0
-                                    }
-                                },
-                            )
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.fillMaxSize(),
+            ) { page ->
+                when (page) {
+                    0 -> SummaryPage(
+                        totalCount = totalCount,
+                        isLoading = isLoading,
+                        onTap = {
+                            tapCount++
+                            if (tapCount >= 5) {
+                                adminExpanded = !adminExpanded
+                                tapCount = 0
+                            }
                         },
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text = totalCount.toString(),
-                        fontSize = 72.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary,
+                    )
+                    1 -> LeaderboardPage(
+                        persons = persons,
+                        isLoading = isLoading,
                     )
                 }
+            }
 
-                Text(
-                    text = "Coffee addiction breakdown",
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(start = 16.dp, bottom = 8.dp),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-
-                HorizontalDivider()
-
-                if (isLoading && persons.isEmpty()) {
+            Row(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = if (adminExpanded) 96.dp else 12.dp),
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+            ) {
+                repeat(2) { index ->
+                    val selected = pagerState.currentPage == index
                     Box(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .size(if (selected) 10.dp else 7.dp)
+                            .padding(0.dp),
                         contentAlignment = Alignment.Center,
                     ) {
-                        CircularProgressIndicator()
-                    }
-                } else if (persons.isEmpty()) {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Text(
-                            text = "No coffees yet. Tap your badge!",
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                    }
-                } else {
-                    LazyColumn(modifier = Modifier.fillMaxSize()) {
-                        itemsIndexed(
-                            items = persons,
-                            key = { _, person -> person.badgeId },
-                        ) { index, person ->
-                            PersonItem(person = person, rank = index + 1)
-                            HorizontalDivider()
+                        AnimatedContent(
+                            targetState = selected,
+                            transitionSpec = { fadeIn(tween(200)) togetherWith fadeOut(tween(200)) },
+                            label = "dot",
+                        ) { isSelected ->
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .then(
+                                        if (isSelected) {
+                                            Modifier.size(10.dp)
+                                        } else {
+                                            Modifier.size(7.dp)
+                                        }
+                                    ),
+                            ) {
+                                androidx.compose.foundation.Canvas(modifier = Modifier.fillMaxSize()) {
+                                    drawCircle(
+                                        color = if (isSelected) {
+                                            androidx.compose.ui.graphics.Color(0xFF0033A0)
+                                        } else {
+                                            androidx.compose.ui.graphics.Color(0x660033A0)
+                                        },
+                                    )
+                                }
+                            }
                         }
                     }
                 }
             }
 
-            // Admin speed-dial anchored to bottom-end
             if (adminExpanded) {
                 AdminMenu(
                     isExpanded = adminExpanded,
@@ -208,6 +222,10 @@ fun MainScreen(
                     onDelete = {
                         adminExpanded = false
                         viewModel.showDeleteUserDialog()
+                    },
+                    onIncrement = {
+                        adminExpanded = false
+                        viewModel.showIncrementCountDialog()
                     },
                     modifier = Modifier.align(Alignment.BottomEnd),
                 )
@@ -230,6 +248,103 @@ fun MainScreen(
             onConfirm = { name -> viewModel.deleteUser(name) },
             onDismiss = { viewModel.dismissDialog() },
         )
+        is DialogState.IncrementCount -> IncrementCountDialog(
+            persons = persons,
+            onConfirm = { name -> viewModel.incrementCount(name) },
+            onDismiss = { viewModel.dismissDialog() },
+        )
         DialogState.None -> Unit
+    }
+}
+
+@Composable
+private fun SummaryPage(
+    totalCount: Int,
+    isLoading: Boolean,
+    onTap: () -> Unit,
+) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        if (isLoading && totalCount == 0) {
+            CircularProgressIndicator()
+        } else {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Box(
+                    modifier = Modifier
+                        .pointerInput(Unit) {
+                            detectTapGestures(onTap = { onTap() })
+                        },
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = totalCount.toString(),
+                        fontSize = 120.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                }
+                Text(
+                    text = "coffees drunk",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun LeaderboardPage(
+    persons: List<com.lua.dsbcafe.data.model.Person>,
+    isLoading: Boolean,
+) {
+    Column(modifier = Modifier.fillMaxSize()) {
+        Text(
+            text = "Leaderboard",
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 8.dp),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+
+        HorizontalDivider()
+
+        if (isLoading && persons.isEmpty()) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center,
+            ) {
+                CircularProgressIndicator()
+            }
+        } else if (persons.isEmpty()) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = "No coffees yet. Tap your badge!",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+            ) {
+                items(
+                    items = persons,
+                    key = { it.badgeId },
+                ) { person ->
+                    PersonItem(person = person)
+                    HorizontalDivider()
+                }
+            }
+        }
     }
 }
