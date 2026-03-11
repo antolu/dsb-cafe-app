@@ -2,7 +2,7 @@ package com.lua.dsbcafe.viewmodel
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lua.dsbcafe.data.model.Person
