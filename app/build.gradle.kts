@@ -20,13 +20,17 @@ ktlint {
     ignoreFailures.set(false)
 }
 
-val localProps = Properties().also { props ->
-    val f = rootProject.file("local.properties")
-    if (f.exists()) props.load(f.inputStream())
-}
+val localProps =
+    Properties()
+        .also { props ->
+            val f = rootProject.file("local.properties")
+            if (f.exists()) props.load(f.inputStream())
+        }
 
-fun localOrEnv(localKey: String, envKey: String): String =
-    localProps.getProperty(localKey) ?: System.getenv(envKey) ?: ""
+fun localOrEnv(
+    localKey: String,
+    envKey: String,
+): String = localProps.getProperty(localKey) ?: System.getenv(envKey) ?: ""
 
 android {
     namespace = "com.lua.dsbcafe"
@@ -47,7 +51,13 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file(localOrEnv("keystore.path", "KEYSTORE_PATH").ifEmpty { "dsb-cafe-release.jks" })
+            storeFile =
+                file(
+                    localOrEnv(
+                        "keystore.path",
+                        "KEYSTORE_PATH",
+                    ).ifEmpty { "dsb-cafe-release.jks" },
+                )
             storePassword = localOrEnv("keystore.password", "KEYSTORE_PASSWORD")
             keyAlias = localOrEnv("key.alias", "KEY_ALIAS")
             keyPassword = localOrEnv("key.password", "KEY_PASSWORD")
@@ -57,7 +67,10 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
             signingConfig = signingConfigs.getByName("release")
         }
     }

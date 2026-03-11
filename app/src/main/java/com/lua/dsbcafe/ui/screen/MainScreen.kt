@@ -193,9 +193,7 @@ fun MainScreen(
             if (adminExpanded) {
                 AdminMenu(
                     isExpanded = adminExpanded,
-                    isExpertMode = isExpertMode,
                     onToggle = { adminExpanded = !adminExpanded },
-                    onToggleExpertMode = { viewModel.toggleExpertMode() },
                     onReset = {
                         adminExpanded = false
                         viewModel.resetCounts()
@@ -236,6 +234,7 @@ fun MainScreen(
         is DialogState.ManualEdit -> ManualEditDialog(
             persons = persons,
             isExpertMode = isExpertMode,
+            onToggleExpertMode = { viewModel.toggleExpertMode() },
             onIncrement = { badgeId -> viewModel.incrementCount(badgeId) },
             onDecrement = { badgeId -> viewModel.decrementCount(badgeId) },
             onDismiss = { viewModel.dismissDialog() },
@@ -326,7 +325,6 @@ private fun LeaderboardPage(
                         person = person,
                         onDoubleTap = { onDoubleTap(person.badgeId) },
                     )
-                    HorizontalDivider()
                 }
             }
         }

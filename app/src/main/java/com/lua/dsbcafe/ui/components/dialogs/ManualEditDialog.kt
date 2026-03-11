@@ -17,6 +17,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -31,13 +32,33 @@ import com.lua.dsbcafe.data.model.Person
 fun ManualEditDialog(
     persons: List<Person>,
     isExpertMode: Boolean,
+    onToggleExpertMode: () -> Unit,
     onIncrement: (String) -> Unit,
     onDecrement: (String) -> Unit,
     onDismiss: () -> Unit,
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Manual Edit") },
+        title = {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Manual Edit")
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "Expert",
+                        style = MaterialTheme.typography.labelMedium,
+                        modifier = Modifier.padding(end = 8.dp)
+                    )
+                    Switch(
+                        checked = isExpertMode,
+                        onCheckedChange = { onToggleExpertMode() }
+                    )
+                }
+            }
+        },
         text = {
             LazyColumn(
                 modifier = Modifier

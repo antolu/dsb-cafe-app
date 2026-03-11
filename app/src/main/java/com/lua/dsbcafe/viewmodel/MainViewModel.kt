@@ -170,7 +170,7 @@ class MainViewModel : ViewModel() {
         val emailBody = persons.value.joinToString("\n") { "${it.name}: ${it.coffeeCount}" }
         val currentMonth = LocalDate.now().month
         val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
-            data = Uri.parse("mailto:")
+            data = "mailto:".toUri()
             putExtra(Intent.EXTRA_SUBJECT, "Coffee Count for $currentMonth")
             putExtra(Intent.EXTRA_TEXT, emailBody)
         }
