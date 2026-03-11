@@ -109,18 +109,6 @@ fun MainScreen(
                 .fillMaxSize()
                 .padding(padding),
         ) {
-            IconButton(
-                onClick = onSignOut,
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(8.dp),
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.Logout,
-                    contentDescription = "Sign out",
-                    tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
-                )
-            }
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier.fillMaxSize(),
@@ -143,6 +131,19 @@ fun MainScreen(
                         onDoubleTap = { badgeId -> viewModel.incrementCount(badgeId) },
                     )
                 }
+            }
+
+            IconButton(
+                onClick = onSignOut,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(8.dp),
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.Logout,
+                    contentDescription = "Sign out",
+                    tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
+                )
             }
 
             Row(
