@@ -5,6 +5,18 @@
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
+# Keep data models
+-keep class com.lua.dsbcafe.data.model.** { *; }
+
+# Firebase/Firestore specific rules
+-keepattributes Signature
+-keepattributes *Annotation*
+-dontwarn com.google.firebase.**
+
+# Preserve line numbers for debugging
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
+
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
 # class:
