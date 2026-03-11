@@ -21,6 +21,7 @@ sealed interface DialogState {
     data class DoubleShot(val badgeId: String, val person: Person) : DialogState
     data class NameInput(val badgeId: String) : DialogState
     data object DeleteUser : DialogState
+    data object IncrementCount : DialogState
 }
 
 sealed interface UiMessage {
@@ -102,6 +103,24 @@ class MainViewModel : ViewModel() {
 
     fun showDeleteUserDialog() {
         _dialogState.value = DialogState.DeleteUser
+    }
+
+    fun showIncrementCountDialog() {
+        _dialogState.value = DialogState.IncrementCount
+    }
+
+    fun incrementCount(name: String) {
+        viewModelScope.launch {
+            try {
+                val person = persons.value.find { it.name == name } ?: return@launch
+                repository.save(person.copy(coffeeCount = person.coffeeCount + 1))
+                _message.value = UiMessage.Info("Added a coffee for ${person.name}.")
+            } catch (e: Exception) {
+                _message.value = UiMessage.Error("Failed to increment: ${e.message}")
+            } finally {
+                _dialogState.value = DialogState.None
+            }
+        }
     }
 
     fun resetCounts() {

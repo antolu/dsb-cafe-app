@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Email
@@ -31,6 +32,7 @@ fun AdminMenu(
     onReset: () -> Unit,
     onEmail: () -> Unit,
     onDelete: () -> Unit,
+    onIncrement: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -45,6 +47,9 @@ fun AdminMenu(
             Column(horizontalAlignment = Alignment.End) {
                 AdminAction(label = "Delete user", onClick = onDelete) {
                     Icon(Icons.Default.Delete, contentDescription = "Delete user")
+                }
+                AdminAction(label = "Add a coffee", onClick = onIncrement) {
+                    Icon(Icons.Default.Add, contentDescription = "Add a coffee")
                 }
                 AdminAction(label = "Send statistics", onClick = onEmail) {
                     Icon(Icons.Default.Email, contentDescription = "Send statistics email")
