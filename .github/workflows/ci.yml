@@ -27,9 +27,11 @@ jobs:
         run: chmod +x gradlew
       - name: Run pre-commit hooks
         uses: pre-commit/action@v3.0.1
-        # Ensure pre-commit sees the system Java
+        # Ensure pre-commit sees the system Java and prevent Gradle from attempting
+        # to auto-download a toolchain (which can fail in CI / network-restricted envs)
         env:
           JAVA_HOME: ${{ env.JAVA_HOME }}
+          GRADLE_OPTS: "-Dorg.gradle.java.installations.auto-download=false"
 
   build:
     runs-on: ubuntu-latest
