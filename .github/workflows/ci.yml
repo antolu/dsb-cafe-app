@@ -21,16 +21,22 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: Write google-services.json
+      - name: Write real google-services.json
+        if: github.actor != 'dependabot[bot]'
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
           if [ -z "$GOOGLE_SERVICES_JSON" ]; then
-            echo "Error: GOOGLE_SERVICES_JSON secret is empty or not set."
+            echo "Error: GOOGLE_SERVICES_JSON secret is missing."
             exit 1
           fi
-          # Using printf '%s' is safer than echo for handling arbitrary strings
           printf '%s' "$GOOGLE_SERVICES_JSON" > app/google-services.json
+
+      - name: Write dummy google-services.json
+        if: github.actor == 'dependabot[bot]'
+        run: |
+          echo "Dependabot detected. Using dummy config for build."
+          printf '{"project_info":{"project_number":"123456789","project_id":"dummy-project"},"client":[{"client_info":{"mobilesdk_app_id":"1:123456789:android:abcdef","android_client_info":{"package_name":"com.lua.dsbcafe"}},"api_key":[{"current_key":"dummy-key"}],"services":{"appinvite_service":{"other_platform_oauth_client":[]}}}],"configuration_version":"1"}' > app/google-services.json
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
