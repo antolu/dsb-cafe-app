@@ -10,6 +10,27 @@ Android NFC coffee counter for a shared café tablet. People tap their NFC badge
 
 ## Build, lint, test commands
 
+### Linting & Code Style
+
+The project uses `ktlint` for formatting and `detekt` for static analysis.
+
+#### Run checks manually
+
+```bash
+# Check code style
+./gradlew ktlintCheck
+
+# Auto-fix code style issues
+./gradlew ktlintFormat
+
+# Run static analysis
+./gradlew detekt
+```
+
+These checks are also run automatically via `pre-commit` before every commit.
+
+### Build and Test Commands
+
 ```bash
 # Build debug APK
 ./gradlew assembleDebug
@@ -19,6 +40,15 @@ Android NFC coffee counter for a shared café tablet. People tap their NFC badge
 
 # Run lint (required to pass before committing)
 ./gradlew lintDebug
+
+# Run ktlint check
+./gradlew ktlintCheck
+
+# Run ktlint format (auto-fix)
+./gradlew ktlintFormat
+
+# Run detekt
+./gradlew detekt
 
 # Run all unit tests
 ./gradlew testDebugUnitTest

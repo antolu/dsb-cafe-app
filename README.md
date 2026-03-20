@@ -68,6 +68,25 @@ service cloud.firestore {
 ./gradlew assembleDebug
 ```
 
+## Linting & Code Style
+
+The project uses `ktlint` for formatting and `detekt` for static analysis.
+
+### Run checks manually
+
+```bash
+# Check code style
+./gradlew ktlintCheck
+
+# Auto-fix code style issues
+./gradlew ktlintFormat
+
+# Run static analysis
+./gradlew detekt
+```
+
+These checks are also run automatically via `pre-commit` before every commit.
+
 ## CI
 
 GitHub Actions runs lint, build, and unit tests on every push and pull request to `main`.
