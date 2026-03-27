@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.sp
 import com.lua.dsbcafe.data.model.Person
 
 @Composable
-fun ManualEditDialog(
+fun manualEditDialog(
     persons: List<Person>,
     isExpertMode: Boolean,
     onToggleExpertMode: () -> Unit,
@@ -43,27 +43,25 @@ fun ManualEditDialog(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 Text("Manual Edit")
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = "Expert",
                         style = MaterialTheme.typography.labelMedium,
-                        modifier = Modifier.padding(end = 8.dp)
+                        modifier = Modifier.padding(end = 8.dp),
                     )
                     Switch(
                         checked = isExpertMode,
-                        onCheckedChange = { onToggleExpertMode() }
+                        onCheckedChange = { onToggleExpertMode() },
                     )
                 }
             }
         },
         text = {
             LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
+                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
             ) {
                 items(persons, key = { it.badgeId }) { person ->
                     ListItem(
@@ -76,15 +74,38 @@ fun ManualEditDialog(
                         trailingContent = {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                horizontalArrangement =
+                                    Arrangement.spacedBy(
+                                        8.dp,
+                                    ),
                             ) {
+                                val errorContainer =
+                                    MaterialTheme.colorScheme.errorContainer
+                                val onErrorContainer =
+                                    MaterialTheme.colorScheme.onErrorContainer
+                                val primaryContainer =
+                                    MaterialTheme.colorScheme.primaryContainer
+                                val onPrimaryContainer =
+                                    MaterialTheme.colorScheme.onPrimaryContainer
+
+                                val errColors =
+                                    IconButtonDefaults.filledIconButtonColors(
+                                        containerColor = errorContainer,
+                                        contentColor = onErrorContainer,
+                                    )
+                                val primColors =
+                                    IconButtonDefaults.filledIconButtonColors(
+                                        containerColor = primaryContainer,
+                                        contentColor = onPrimaryContainer,
+                                    )
                                 if (isExpertMode) {
                                     IconButton(
-                                        onClick = { onDecrement(person.badgeId) },
-                                        colors = IconButtonDefaults.filledIconButtonColors(
-                                            containerColor = MaterialTheme.colorScheme.errorContainer,
-                                            contentColor = MaterialTheme.colorScheme.onErrorContainer,
-                                        ),
+                                        onClick = {
+                                            onDecrement(
+                                                person.badgeId,
+                                            )
+                                        },
+                                        colors = errColors,
                                         modifier = Modifier.size(32.dp),
                                     ) {
                                         Icon(
@@ -99,15 +120,15 @@ fun ManualEditDialog(
                                     text = person.coffeeCount.toString(),
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.Bold,
-                                    modifier = Modifier.padding(horizontal = 4.dp),
+                                    modifier =
+                                        Modifier.padding(
+                                            horizontal = 4.dp,
+                                        ),
                                 )
 
                                 IconButton(
                                     onClick = { onIncrement(person.badgeId) },
-                                    colors = IconButtonDefaults.filledIconButtonColors(
-                                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    ),
+                                    colors = primColors,
                                     modifier = Modifier.size(32.dp),
                                 ) {
                                     Icon(

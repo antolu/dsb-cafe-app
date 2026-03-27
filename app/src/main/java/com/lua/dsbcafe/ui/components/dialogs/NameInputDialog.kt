@@ -17,7 +17,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 
 @Composable
-fun NameInputDialog(
+fun nameInputDialog(
     onConfirm: (String) -> Unit,
     onDismiss: () -> Unit,
 ) {
@@ -38,15 +38,19 @@ fun NameInputDialog(
                 label = { Text("Your name") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Words,
-                    imeAction = ImeAction.Done,
-                ),
+                keyboardOptions =
+                    KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Words,
+                        imeAction = ImeAction.Done,
+                    ),
                 keyboardActions = KeyboardActions(onDone = { submit() }),
             )
         },
         confirmButton = {
-            TextButton(onClick = ::submit, enabled = isValid) { Text("Register") }
+            TextButton(
+                onClick = ::submit,
+                enabled = isValid,
+            ) { Text("Register") }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) { Text("Cancel") }

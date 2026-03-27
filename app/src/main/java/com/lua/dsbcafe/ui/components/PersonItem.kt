@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalStdlibApi::class)
+
 package com.lua.dsbcafe.ui.components
 
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -22,28 +24,28 @@ import androidx.compose.ui.unit.sp
 import com.lua.dsbcafe.data.model.Person
 
 @Composable
-fun PersonItem(
+fun personItem(
     person: Person,
     onDoubleTap: () -> Unit = {},
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .pointerInput(Unit) {
-                detectTapGestures(onDoubleTap = { onDoubleTap() })
-            }
-            .padding(vertical = 12.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .pointerInput(Unit) {
+                    detectTapGestures(onDoubleTap = { onDoubleTap() })
+                }.padding(vertical = 12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             text = person.name,
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurface,
-            fontWeight = FontWeight.Medium
+            fontWeight = FontWeight.Medium,
         )
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.Center,
         ) {
             Text(
                 text = person.coffeeCount.toString(),

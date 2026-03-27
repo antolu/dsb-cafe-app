@@ -20,7 +20,7 @@ import androidx.compose.ui.semantics.Role
 import com.lua.dsbcafe.data.model.Person
 
 @Composable
-fun DeleteUserDialog(
+fun deleteUserDialog(
     persons: List<Person>,
     onConfirm: (String) -> Unit,
     onDismiss: () -> Unit,
@@ -32,9 +32,10 @@ fun DeleteUserDialog(
         title = { Text("Delete user") },
         text = {
             LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .selectableGroup(),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .selectableGroup(),
             ) {
                 items(persons, key = { it.badgeId }) { person ->
                     ListItem(
@@ -45,11 +46,12 @@ fun DeleteUserDialog(
                                 onClick = null,
                             )
                         },
-                        modifier = Modifier.selectable(
-                            selected = selected == person.name,
-                            role = Role.RadioButton,
-                            onClick = { selected = person.name },
-                        ),
+                        modifier =
+                            Modifier.selectable(
+                                selected = selected == person.name,
+                                role = Role.RadioButton,
+                                onClick = { selected = person.name },
+                            ),
                     )
                 }
             }

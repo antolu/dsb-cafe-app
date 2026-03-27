@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 
 @Composable
-fun AdminMenu(
+fun adminMenu(
     isExpanded: Boolean,
     onToggle: () -> Unit,
     onReset: () -> Unit,
@@ -45,17 +45,26 @@ fun AdminMenu(
             exit = fadeOut(),
         ) {
             Column(horizontalAlignment = Alignment.End) {
-                AdminAction(label = "Delete user", onClick = onDelete) {
-                    Icon(Icons.Default.Delete, contentDescription = "Delete user")
+                adminAction(label = "Delete user", onClick = onDelete) {
+                    Icon(
+                        Icons.Default.Delete,
+                        contentDescription = "Delete user",
+                    )
                 }
-                AdminAction(label = "Manual edit", onClick = onIncrement) {
+                adminAction(label = "Manual edit", onClick = onIncrement) {
                     Icon(Icons.Default.Add, contentDescription = "Manual edit")
                 }
-                AdminAction(label = "Send statistics", onClick = onEmail) {
-                    Icon(Icons.Default.Email, contentDescription = "Send statistics email")
+                adminAction(label = "Send statistics", onClick = onEmail) {
+                    Icon(
+                        Icons.Default.Email,
+                        contentDescription = "Send statistics email",
+                    )
                 }
-                AdminAction(label = "Reset counts", onClick = onReset) {
-                    Icon(Icons.Default.Refresh, contentDescription = "Reset counts")
+                adminAction(label = "Reset counts", onClick = onReset) {
+                    Icon(
+                        Icons.Default.Refresh,
+                        contentDescription = "Reset counts",
+                    )
                 }
             }
         }
@@ -63,13 +72,16 @@ fun AdminMenu(
         FloatingActionButton(
             onClick = onToggle,
             containerColor = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .size(56.dp)
-                .zIndex(1f),
+            modifier =
+                Modifier
+                    .size(56.dp)
+                    .zIndex(1f),
         ) {
             Icon(
-                imageVector = if (isExpanded) Icons.Default.Close else Icons.Default.Menu,
-                contentDescription = if (isExpanded) "Close admin menu" else "Open admin menu",
+                imageVector =
+                    if (isExpanded) Icons.Default.Close else Icons.Default.Menu,
+                contentDescription =
+                    if (isExpanded) "Close admin menu" else "Open admin menu",
                 tint = MaterialTheme.colorScheme.onPrimary,
             )
         }
@@ -77,7 +89,7 @@ fun AdminMenu(
 }
 
 @Composable
-private fun AdminAction(
+private fun adminAction(
     label: String,
     onClick: () -> Unit,
     icon: @Composable () -> Unit,

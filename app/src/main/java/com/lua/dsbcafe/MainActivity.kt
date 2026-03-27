@@ -13,9 +13,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.firebase.FirebaseApp
 import com.lua.dsbcafe.auth.AuthManager
 import com.lua.dsbcafe.nfc.NfcManager
-import com.lua.dsbcafe.ui.screen.LoginScreen
-import com.lua.dsbcafe.ui.screen.MainScreen
-import com.lua.dsbcafe.ui.theme.DSBCafeTheme
+import com.lua.dsbcafe.ui.screen.loginScreen
+import com.lua.dsbcafe.ui.screen.mainScreen
+import com.lua.dsbcafe.ui.theme.dsbCafeTheme
 import com.lua.dsbcafe.viewmodel.MainViewModel
 
 class MainActivity : ComponentActivity() {
@@ -39,9 +39,9 @@ class MainActivity : ComponentActivity() {
                 mutableStateOf(authManager.currentUser != null)
             }
 
-            DSBCafeTheme {
+            dsbCafeTheme {
                 if (isSignedIn) {
-                    MainScreen(
+                    mainScreen(
                         onSignOut = {
                             authManager.signOut()
                             isSignedIn = false
@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
                         viewModel = mainViewModel,
                     )
                 } else {
-                    LoginScreen(
+                    loginScreen(
                         authManager = authManager,
                         webClientId = getString(R.string.default_web_client_id),
                         onSignedIn = { isSignedIn = true },

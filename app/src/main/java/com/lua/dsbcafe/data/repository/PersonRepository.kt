@@ -26,7 +26,10 @@ class PersonRepository {
     suspend fun resetAllCounts(persons: List<Person>) {
         val batch = db.batch()
         persons.forEach { person ->
-            batch.set(collection.document(person.badgeId), person.copy(coffeeCount = 0))
+            batch.set(
+                collection.document(person.badgeId),
+                person.copy(coffeeCount = 0),
+            )
         }
         batch.commit().await()
     }

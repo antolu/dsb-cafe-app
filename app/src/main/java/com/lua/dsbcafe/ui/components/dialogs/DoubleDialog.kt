@@ -18,7 +18,7 @@ import com.lua.dsbcafe.data.model.Person
 import kotlinx.coroutines.delay
 
 @Composable
-fun DoubleDialog(
+fun doubleDialog(
     person: Person,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
@@ -42,7 +42,9 @@ fun DoubleDialog(
         text = {
             androidx.compose.foundation.layout.Column {
                 Text("Add another coffee for ${person.name}?")
-                androidx.compose.foundation.layout.Spacer(modifier = Modifier.padding(top = 12.dp))
+                androidx.compose.foundation.layout.Spacer(
+                    modifier = Modifier.padding(top = 12.dp),
+                )
                 LinearProgressIndicator(
                     progress = { progress },
                     modifier = Modifier.fillMaxWidth(),
