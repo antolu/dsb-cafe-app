@@ -1,3 +1,12 @@
+@file:Suppress(
+    "FunctionName",
+    "MaxLineLength",
+    "ktlint:standard:max-line-length",
+    "ktlint:standard:argument-list-wrapping",
+    "ktlint:standard:chain-method-continuation",
+    "ktlint:standard:multiline-expression-wrapping",
+)
+
 package com.lua.dsbcafe.ui.components.dialogs
 
 import androidx.compose.foundation.layout.Arrangement
@@ -43,27 +52,25 @@ fun ManualEditDialog(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 Text("Manual Edit")
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = "Expert",
                         style = MaterialTheme.typography.labelMedium,
-                        modifier = Modifier.padding(end = 8.dp)
+                        modifier = Modifier.padding(end = 8.dp),
                     )
                     Switch(
                         checked = isExpertMode,
-                        onCheckedChange = { onToggleExpertMode() }
+                        onCheckedChange = { onToggleExpertMode() },
                     )
                 }
             }
         },
         text = {
             LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
+                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
             ) {
                 items(persons, key = { it.badgeId }) { person ->
                     ListItem(
@@ -78,13 +85,26 @@ fun ManualEditDialog(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                             ) {
+                                val errColors = IconButtonDefaults.filledIconButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.errorContainer,
+                                    contentColor = MaterialTheme.colorScheme.onErrorContainer,
+                                )
+                                val primColors = IconButtonDefaults.filledIconButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                )
                                 if (isExpertMode) {
                                     IconButton(
-                                        onClick = { onDecrement(person.badgeId) },
-                                        colors = IconButtonDefaults.filledIconButtonColors(
-                                            containerColor = MaterialTheme.colorScheme.errorContainer,
-                                            contentColor = MaterialTheme.colorScheme.onErrorContainer,
-                                        ),
+                                        onClick = {
+                                            onDecrement(person.badgeId)
+                                        },
+                                        colors = IconButtonDefaults
+                                            .filledIconButtonColors(
+                                                containerColor =
+                                                    MaterialTheme.colorScheme.errorContainer,
+                                                contentColor =
+                                                    MaterialTheme.colorScheme.onErrorContainer,
+                                            ),
                                         modifier = Modifier.size(32.dp),
                                     ) {
                                         Icon(
@@ -103,11 +123,16 @@ fun ManualEditDialog(
                                 )
 
                                 IconButton(
-                                    onClick = { onIncrement(person.badgeId) },
-                                    colors = IconButtonDefaults.filledIconButtonColors(
-                                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    ),
+                                    onClick = {
+                                        onIncrement(person.badgeId)
+                                    },
+                                    colors = IconButtonDefaults
+                                        .filledIconButtonColors(
+                                            containerColor =
+                                                MaterialTheme.colorScheme.primaryContainer,
+                                            contentColor =
+                                                MaterialTheme.colorScheme.onPrimaryContainer,
+                                        ),
                                     modifier = Modifier.size(32.dp),
                                 ) {
                                     Icon(

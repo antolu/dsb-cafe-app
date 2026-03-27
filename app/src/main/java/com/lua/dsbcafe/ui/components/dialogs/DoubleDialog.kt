@@ -1,3 +1,5 @@
+@file:Suppress("FunctionName", "MaxLineLength")
+
 package com.lua.dsbcafe.ui.components.dialogs
 
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -42,7 +44,9 @@ fun DoubleDialog(
         text = {
             androidx.compose.foundation.layout.Column {
                 Text("Add another coffee for ${person.name}?")
-                androidx.compose.foundation.layout.Spacer(modifier = Modifier.padding(top = 12.dp))
+                androidx.compose.foundation.layout.Spacer(
+                    modifier = Modifier.padding(top = 12.dp),
+                )
                 LinearProgressIndicator(
                     progress = { progress },
                     modifier = Modifier.fillMaxWidth(),

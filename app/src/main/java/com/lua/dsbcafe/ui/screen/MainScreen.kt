@@ -1,3 +1,5 @@
+@file:Suppress("FunctionName", "MaxLineLength")
+
 package com.lua.dsbcafe.ui.screen
 
 import androidx.compose.animation.AnimatedContent
@@ -20,10 +22,8 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -31,7 +31,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -59,7 +58,6 @@ import com.lua.dsbcafe.viewmodel.DialogState
 import com.lua.dsbcafe.viewmodel.MainViewModel
 import com.lua.dsbcafe.viewmodel.UiMessage
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,10 +83,11 @@ fun MainScreen(
 
     LaunchedEffect(message) {
         message?.let {
-            val text = when (it) {
-                is UiMessage.Info -> it.text
-                is UiMessage.Error -> it.text
-            }
+            val text =
+                when (it) {
+                    is UiMessage.Info -> it.text
+                    is UiMessage.Error -> it.text
+                }
             snackbarHostState.showSnackbar(text)
             viewModel.clearMessage()
         }
@@ -105,39 +104,45 @@ fun MainScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { padding ->
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(padding),
         ) {
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier.fillMaxSize(),
             ) { page ->
                 when (page) {
-                    0 -> SummaryPage(
-                        totalCount = totalCount,
-                        isLoading = isLoading,
-                        onTap = {
-                            tapCount++
-                            if (tapCount >= 5) {
-                                adminExpanded = !adminExpanded
-                                tapCount = 0
-                            }
-                        },
-                    )
-                    1 -> LeaderboardPage(
-                        persons = persons,
-                        isLoading = isLoading,
-                        onDoubleTap = { badgeId -> viewModel.incrementCount(badgeId) },
-                    )
+                    0 ->
+                        SummaryPage(
+                            totalCount = totalCount,
+                            isLoading = isLoading,
+                            onTap = {
+                                tapCount++
+                                if (tapCount >= 5) {
+                                    adminExpanded = !adminExpanded
+                                    tapCount = 0
+                                }
+                            },
+                        )
+                    1 ->
+                        LeaderboardPage(
+                            persons = persons,
+                            isLoading = isLoading,
+                            onDoubleTap = { badgeId ->
+                                viewModel.incrementCount(badgeId)
+                            },
+                        )
                 }
             }
 
             IconButton(
                 onClick = onSignOut,
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(8.dp),
+                modifier =
+                    Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(8.dp),
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.Logout,
@@ -147,42 +152,57 @@ fun MainScreen(
             }
 
             Row(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = if (adminExpanded) 96.dp else 12.dp),
+                modifier =
+                    Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = if (adminExpanded) 96.dp else 12.dp),
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
             ) {
                 repeat(2) { index ->
                     val selected = pagerState.currentPage == index
                     Box(
-                        modifier = Modifier
-                            .size(if (selected) 10.dp else 7.dp)
-                            .padding(0.dp),
+                        modifier =
+                            Modifier
+                                .size(if (selected) 10.dp else 7.dp)
+                                .padding(0.dp),
                         contentAlignment = Alignment.Center,
                     ) {
                         AnimatedContent(
                             targetState = selected,
-                            transitionSpec = { fadeIn(tween(200)) togetherWith fadeOut(tween(200)) },
+                            transitionSpec = {
+                                fadeIn(tween(200)) togetherWith
+                                    fadeOut(tween(200))
+                            },
                             label = "dot",
                         ) { isSelected ->
                             Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .then(
-                                        if (isSelected) {
-                                            Modifier.size(10.dp)
-                                        } else {
-                                            Modifier.size(7.dp)
-                                        }
-                                    ),
+                                modifier =
+                                    Modifier
+                                        .fillMaxSize()
+                                        .then(
+                                            if (isSelected) {
+                                                Modifier.size(10.dp)
+                                            } else {
+                                                Modifier.size(7.dp)
+                                            },
+                                        ),
                             ) {
-                                androidx.compose.foundation.Canvas(modifier = Modifier.fillMaxSize()) {
+                                androidx.compose.foundation.Canvas(
+                                    modifier = Modifier.fillMaxSize(),
+                                ) {
                                     drawCircle(
-                                        color = if (isSelected) {
-                                            androidx.compose.ui.graphics.Color(0xFF0033A0)
-                                        } else {
-                                            androidx.compose.ui.graphics.Color(0x660033A0)
-                                        },
+                                        color =
+                                            if (isSelected) {
+                                                androidx.compose.ui.graphics
+                                                    .Color(
+                                                        0xFF0033A0,
+                                                    )
+                                            } else {
+                                                androidx.compose.ui.graphics
+                                                    .Color(
+                                                        0x660033A0,
+                                                    )
+                                            },
                                     )
                                 }
                             }
@@ -218,28 +238,39 @@ fun MainScreen(
     }
 
     when (val state = dialogState) {
-        is DialogState.DoubleShot -> DoubleDialog(
-            person = state.person,
-            onConfirm = { viewModel.confirmDouble(state.badgeId, state.person) },
-            onDismiss = { viewModel.dismissDialog() },
-        )
-        is DialogState.NameInput -> NameInputDialog(
-            onConfirm = { name -> viewModel.registerNewPerson(state.badgeId, name) },
-            onDismiss = { viewModel.dismissDialog() },
-        )
-        is DialogState.DeleteUser -> DeleteUserDialog(
-            persons = persons,
-            onConfirm = { name -> viewModel.deleteUser(name) },
-            onDismiss = { viewModel.dismissDialog() },
-        )
-        is DialogState.ManualEdit -> ManualEditDialog(
-            persons = persons,
-            isExpertMode = isExpertMode,
-            onToggleExpertMode = { viewModel.toggleExpertMode() },
-            onIncrement = { badgeId -> viewModel.incrementCount(badgeId) },
-            onDecrement = { badgeId -> viewModel.decrementCount(badgeId) },
-            onDismiss = { viewModel.dismissDialog() },
-        )
+        is DialogState.DoubleShot ->
+            DoubleDialog(
+                person = state.person,
+                onConfirm = {
+                    viewModel.confirmDouble(
+                        state.badgeId,
+                        state.person,
+                    )
+                },
+                onDismiss = { viewModel.dismissDialog() },
+            )
+        is DialogState.NameInput ->
+            NameInputDialog(
+                onConfirm = { name ->
+                    viewModel.registerNewPerson(state.badgeId, name)
+                },
+                onDismiss = { viewModel.dismissDialog() },
+            )
+        is DialogState.DeleteUser ->
+            DeleteUserDialog(
+                persons = persons,
+                onConfirm = { name -> viewModel.deleteUser(name) },
+                onDismiss = { viewModel.dismissDialog() },
+            )
+        is DialogState.ManualEdit ->
+            ManualEditDialog(
+                persons = persons,
+                isExpertMode = isExpertMode,
+                onToggleExpertMode = { viewModel.toggleExpertMode() },
+                onIncrement = { badgeId -> viewModel.incrementCount(badgeId) },
+                onDecrement = { badgeId -> viewModel.decrementCount(badgeId) },
+                onDismiss = { viewModel.dismissDialog() },
+            )
         DialogState.None -> Unit
     }
 }
@@ -262,10 +293,11 @@ private fun SummaryPage(
                 verticalArrangement = Arrangement.Center,
             ) {
                 Box(
-                    modifier = Modifier
-                        .pointerInput(Unit) {
-                            detectTapGestures(onTap = { onTap() })
-                        },
+                    modifier =
+                        Modifier
+                            .pointerInput(Unit) {
+                                detectTapGestures(onTap = { onTap() })
+                            },
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
@@ -295,7 +327,6 @@ private fun LeaderboardPage(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
     ) {
-
         if (isLoading && persons.isEmpty()) {
             Box(
                 modifier = Modifier.fillMaxSize(),

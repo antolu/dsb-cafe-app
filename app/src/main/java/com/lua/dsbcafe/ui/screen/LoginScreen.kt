@@ -1,3 +1,5 @@
+@file:Suppress("FunctionName", "MaxLineLength")
+
 package com.lua.dsbcafe.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
@@ -52,10 +54,11 @@ fun LoginScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { padding ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(horizontal = 32.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(horizontal = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
@@ -90,13 +93,17 @@ fun LoginScreen(
                     onClick = {
                         scope.launch {
                             isLoading = true
-                            val result = authManager.signIn(context, webClientId)
+                            val result =
+                                authManager.signIn(
+                                    context,
+                                    webClientId,
+                                )
                             isLoading = false
                             result.fold(
                                 onSuccess = { onSignedIn() },
                                 onFailure = { e ->
                                     snackbarHostState.showSnackbar(
-                                        e.message ?: "Sign-in failed"
+                                        e.message ?: "Sign-in failed",
                                     )
                                 },
                             )
@@ -106,9 +113,10 @@ fun LoginScreen(
                     Icon(
                         imageVector = Icons.Filled.Coffee,
                         contentDescription = null,
-                        modifier = Modifier
-                            .size(18.dp)
-                            .padding(end = 4.dp),
+                        modifier =
+                            Modifier
+                                .size(18.dp)
+                                .padding(end = 4.dp),
                     )
                     Text("Sign in with Google")
                 }

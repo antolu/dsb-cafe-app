@@ -1,3 +1,5 @@
+@file:Suppress("FunctionName", "MaxLineLength")
+
 package com.lua.dsbcafe.ui.components
 
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -27,23 +29,23 @@ fun PersonItem(
     onDoubleTap: () -> Unit = {},
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .pointerInput(Unit) {
-                detectTapGestures(onDoubleTap = { onDoubleTap() })
-            }
-            .padding(vertical = 12.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .pointerInput(Unit) {
+                    detectTapGestures(onDoubleTap = { onDoubleTap() })
+                }.padding(vertical = 12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             text = person.name,
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurface,
-            fontWeight = FontWeight.Medium
+            fontWeight = FontWeight.Medium,
         )
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.Center,
         ) {
             Text(
                 text = person.coffeeCount.toString(),

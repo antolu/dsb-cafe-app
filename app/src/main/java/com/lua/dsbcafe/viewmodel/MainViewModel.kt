@@ -18,27 +18,48 @@ import java.time.LocalDate
 
 sealed interface DialogState {
     data object None : DialogState
-    data class DoubleShot(val badgeId: String, val person: Person) : DialogState
-    data class NameInput(val badgeId: String) : DialogState
+
+    data class DoubleShot(
+        val badgeId: String,
+        val person: Person,
+    ) : DialogState
+
+    data class NameInput(
+        val badgeId: String,
+    ) : DialogState
+
     data object DeleteUser : DialogState
+
     data object ManualEdit : DialogState
 }
 
 sealed interface UiMessage {
-    data class Info(val text: String) : UiMessage
-    data class Error(val text: String) : UiMessage
+    data class Info(
+        val text: String,
+    ) : UiMessage
+
+    data class Error(
+        val text: String,
+    ) : UiMessage
 }
 
 class MainViewModel : ViewModel() {
     private val repository = PersonRepository()
 
-    val persons: StateFlow<List<Person>> = repository.observePersons()
-        .map { it.sortedByDescending { p -> p.coffeeCount } }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+    val persons: StateFlow<List<Person>> =
+        repository
+            .observePersons()
+            .map { it.sortedByDescending { p -> p.coffeeCount } }
+            .stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(5_000),
+                emptyList(),
+            )
 
-    val totalCount: StateFlow<Int> = persons
-        .map { list -> list.sumOf { it.coffeeCount } }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 0)
+    val totalCount: StateFlow<Int> =
+        persons
+            .map { list -> list.sumOf { it.coffeeCount } }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 0)
 
     private val _dialogState = MutableStateFlow<DialogState>(DialogState.None)
     val dialogState: StateFlow<DialogState> = _dialogState.asStateFlow()
@@ -58,21 +79,30 @@ class MainViewModel : ViewModel() {
             try {
                 val existing = repository.getOrNull(badgeId)
                 if (existing != null) {
-                    val updated = existing.copy(coffeeCount = existing.coffeeCount + 1)
+                    val updated =
+                        existing.copy(
+                            coffeeCount =
+                                existing.coffeeCount + 1,
+                        )
                     repository.save(updated)
-                    _dialogState.value = DialogState.DoubleShot(badgeId, updated)
+                    _dialogState.value =
+                        DialogState.DoubleShot(badgeId, updated)
                 } else {
                     _dialogState.value = DialogState.NameInput(badgeId)
                 }
             } catch (e: Exception) {
-                _message.value = UiMessage.Error("Failed to read badge: ${e.message}")
+                _message.value =
+                    UiMessage.Error("Failed to read badge: ${e.message}")
             } finally {
                 _isLoading.value = false
             }
         }
     }
 
-    fun registerNewPerson(badgeId: String, name: String) {
+    fun registerNewPerson(
+        badgeId: String,
+        name: String,
+    ) {
         viewModelScope.launch {
             val person = Person(name = name, coffeeCount = 1, badgeId = badgeId)
             try {
@@ -80,20 +110,26 @@ class MainViewModel : ViewModel() {
                 _dialogState.value = DialogState.DoubleShot(badgeId, person)
                 _message.value = UiMessage.Info("Welcome, $name!")
             } catch (e: Exception) {
-                _message.value = UiMessage.Error("Failed to register: ${e.message}")
+                _message.value =
+                    UiMessage.Error("Failed to register: ${e.message}")
                 _dialogState.value = DialogState.None
             }
         }
     }
 
-    fun confirmDouble(badgeId: String, person: Person) {
+    fun confirmDouble(
+        badgeId: String,
+        person: Person,
+    ) {
         viewModelScope.launch {
             val updated = person.copy(coffeeCount = person.coffeeCount + 1)
             try {
                 repository.save(updated)
-                _message.value = UiMessage.Info("Double shot counted for ${person.name}!")
+                _message.value =
+                    UiMessage.Info("Double shot counted for ${person.name}!")
             } catch (e: Exception) {
-                _message.value = UiMessage.Error("Failed to update count: ${e.message}")
+                _message.value =
+                    UiMessage.Error("Failed to update count: ${e.message}")
             } finally {
                 _dialogState.value = DialogState.None
             }
@@ -119,11 +155,17 @@ class MainViewModel : ViewModel() {
     fun incrementCount(badgeId: String) {
         viewModelScope.launch {
             try {
-                val person = persons.value.find { it.badgeId == badgeId } ?: return@launch
-                repository.save(person.copy(coffeeCount = person.coffeeCount + 1))
-                _message.value = UiMessage.Info("Added a coffee for ${person.name}.")
+                val person =
+                    persons.value.find { it.badgeId == badgeId }
+                        ?: return@launch
+                repository.save(
+                    person.copy(coffeeCount = person.coffeeCount + 1),
+                )
+                _message.value =
+                    UiMessage.Info("Added a coffee for ${person.name}.")
             } catch (e: Exception) {
-                _message.value = UiMessage.Error("Failed to increment: ${e.message}")
+                _message.value =
+                    UiMessage.Error("Failed to increment: ${e.message}")
             }
         }
     }
@@ -131,13 +173,22 @@ class MainViewModel : ViewModel() {
     fun decrementCount(badgeId: String) {
         viewModelScope.launch {
             try {
-                val person = persons.value.find { it.badgeId == badgeId } ?: return@launch
+                val person =
+                    persons.value.find { it.badgeId == badgeId }
+                        ?: return@launch
                 if (person.coffeeCount > 0) {
-                    repository.save(person.copy(coffeeCount = person.coffeeCount - 1))
-                    _message.value = UiMessage.Info("Removed a coffee for ${person.name}.")
+                    repository.save(
+                        person.copy(
+                            coffeeCount =
+                                person.coffeeCount - 1,
+                        ),
+                    )
+                    _message.value =
+                        UiMessage.Info("Removed a coffee for ${person.name}.")
                 }
             } catch (e: Exception) {
-                _message.value = UiMessage.Error("Failed to decrement: ${e.message}")
+                _message.value =
+                    UiMessage.Error("Failed to decrement: ${e.message}")
             }
         }
     }
@@ -167,13 +218,17 @@ class MainViewModel : ViewModel() {
     }
 
     fun sendStatisticsEmail(context: Context) {
-        val emailBody = persons.value.joinToString("\n") { "${it.name}: ${it.coffeeCount}" }
+        val emailBody =
+            persons.value.joinToString("\n") {
+                "${it.name}: ${it.coffeeCount}"
+            }
         val currentMonth = LocalDate.now().month
-        val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
-            data = "mailto:".toUri()
-            putExtra(Intent.EXTRA_SUBJECT, "Coffee Count for $currentMonth")
-            putExtra(Intent.EXTRA_TEXT, emailBody)
-        }
+        val emailIntent =
+            Intent(Intent.ACTION_SENDTO).apply {
+                data = "mailto:".toUri()
+                putExtra(Intent.EXTRA_SUBJECT, "Coffee Count for $currentMonth")
+                putExtra(Intent.EXTRA_TEXT, emailBody)
+            }
         context.startActivity(Intent.createChooser(emailIntent, "Send Email"))
     }
 

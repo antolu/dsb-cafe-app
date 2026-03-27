@@ -1,3 +1,5 @@
+@file:Suppress("FunctionName", "MaxLineLength")
+
 package com.lua.dsbcafe.ui.components.dialogs
 
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,15 +40,19 @@ fun NameInputDialog(
                 label = { Text("Your name") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Words,
-                    imeAction = ImeAction.Done,
-                ),
+                keyboardOptions =
+                    KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Words,
+                        imeAction = ImeAction.Done,
+                    ),
                 keyboardActions = KeyboardActions(onDone = { submit() }),
             )
         },
         confirmButton = {
-            TextButton(onClick = ::submit, enabled = isValid) { Text("Register") }
+            TextButton(
+                onClick = ::submit,
+                enabled = isValid,
+            ) { Text("Register") }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) { Text("Cancel") }
