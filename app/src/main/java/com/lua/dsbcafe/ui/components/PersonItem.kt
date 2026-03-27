@@ -1,4 +1,4 @@
-@file:Suppress("FunctionName", "MaxLineLength")
+@file:OptIn(ExperimentalStdlibApi::class)
 
 package com.lua.dsbcafe.ui.components
 
@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.sp
 import com.lua.dsbcafe.data.model.Person
 
 @Composable
-fun PersonItem(
+fun personItem(
     person: Person,
     onDoubleTap: () -> Unit = {},
 ) {

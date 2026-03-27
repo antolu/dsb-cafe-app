@@ -1,5 +1,3 @@
-@file:Suppress("FunctionName", "MaxLineLength")
-
 package com.lua.dsbcafe.ui.components.dialogs
 
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,7 +20,7 @@ import androidx.compose.ui.semantics.Role
 import com.lua.dsbcafe.data.model.Person
 
 @Composable
-fun DeleteUserDialog(
+fun deleteUserDialog(
     persons: List<Person>,
     onConfirm: (String) -> Unit,
     onDismiss: () -> Unit,

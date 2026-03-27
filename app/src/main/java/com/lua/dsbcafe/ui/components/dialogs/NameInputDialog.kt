@@ -1,5 +1,3 @@
-@file:Suppress("FunctionName", "MaxLineLength")
-
 package com.lua.dsbcafe.ui.components.dialogs
 
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,7 +17,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 
 @Composable
-fun NameInputDialog(
+fun nameInputDialog(
     onConfirm: (String) -> Unit,
     onDismiss: () -> Unit,
 ) {

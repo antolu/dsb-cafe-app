@@ -1,5 +1,3 @@
-@file:Suppress("FunctionName", "MaxLineLength")
-
 package com.lua.dsbcafe.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -65,7 +63,7 @@ private val DarkColorScheme =
     )
 
 @Composable
-fun DSBCafeTheme(
+fun dsbCafeTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {

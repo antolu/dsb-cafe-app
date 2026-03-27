@@ -1,5 +1,3 @@
-@file:Suppress("FunctionName", "MaxLineLength")
-
 package com.lua.dsbcafe.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
@@ -36,7 +34,7 @@ import com.lua.dsbcafe.auth.AuthManager
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginScreen(
+fun loginScreen(
     authManager: AuthManager,
     webClientId: String,
     onSignedIn: () -> Unit,

@@ -1,5 +1,3 @@
-@file:Suppress("FunctionName", "MaxLineLength")
-
 package com.lua.dsbcafe.ui.components.dialogs
 
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,7 +18,7 @@ import com.lua.dsbcafe.data.model.Person
 import kotlinx.coroutines.delay
 
 @Composable
-fun DoubleDialog(
+fun doubleDialog(
     person: Person,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,

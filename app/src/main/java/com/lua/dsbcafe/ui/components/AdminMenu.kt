@@ -1,5 +1,3 @@
-@file:Suppress("FunctionName", "MaxLineLength")
-
 package com.lua.dsbcafe.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
@@ -28,7 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 
 @Composable
-fun AdminMenu(
+fun adminMenu(
     isExpanded: Boolean,
     onToggle: () -> Unit,
     onReset: () -> Unit,
@@ -47,22 +45,22 @@ fun AdminMenu(
             exit = fadeOut(),
         ) {
             Column(horizontalAlignment = Alignment.End) {
-                AdminAction(label = "Delete user", onClick = onDelete) {
+                adminAction(label = "Delete user", onClick = onDelete) {
                     Icon(
                         Icons.Default.Delete,
                         contentDescription = "Delete user",
                     )
                 }
-                AdminAction(label = "Manual edit", onClick = onIncrement) {
+                adminAction(label = "Manual edit", onClick = onIncrement) {
                     Icon(Icons.Default.Add, contentDescription = "Manual edit")
                 }
-                AdminAction(label = "Send statistics", onClick = onEmail) {
+                adminAction(label = "Send statistics", onClick = onEmail) {
                     Icon(
                         Icons.Default.Email,
                         contentDescription = "Send statistics email",
                     )
                 }
-                AdminAction(label = "Reset counts", onClick = onReset) {
+                adminAction(label = "Reset counts", onClick = onReset) {
                     Icon(
                         Icons.Default.Refresh,
                         contentDescription = "Reset counts",
@@ -91,7 +89,7 @@ fun AdminMenu(
 }
 
 @Composable
-private fun AdminAction(
+private fun adminAction(
     label: String,
     onClick: () -> Unit,
     icon: @Composable () -> Unit,

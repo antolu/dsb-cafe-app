@@ -1,5 +1,3 @@
-@file:Suppress("FunctionName", "MaxLineLength")
-
 package com.lua.dsbcafe.ui.screen
 
 import androidx.compose.animation.AnimatedContent
@@ -48,12 +46,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.lua.dsbcafe.ui.components.AdminMenu
-import com.lua.dsbcafe.ui.components.PersonItem
-import com.lua.dsbcafe.ui.components.dialogs.DeleteUserDialog
-import com.lua.dsbcafe.ui.components.dialogs.DoubleDialog
-import com.lua.dsbcafe.ui.components.dialogs.ManualEditDialog
-import com.lua.dsbcafe.ui.components.dialogs.NameInputDialog
 import com.lua.dsbcafe.viewmodel.DialogState
 import com.lua.dsbcafe.viewmodel.MainViewModel
 import com.lua.dsbcafe.viewmodel.UiMessage
@@ -61,7 +53,7 @@ import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(
+fun mainScreen(
     onSignOut: () -> Unit,
     viewModel: MainViewModel = viewModel(),
 ) {
@@ -115,7 +107,7 @@ fun MainScreen(
             ) { page ->
                 when (page) {
                     0 ->
-                        SummaryPage(
+                        summaryPage(
                             totalCount = totalCount,
                             isLoading = isLoading,
                             onTap = {
@@ -127,7 +119,7 @@ fun MainScreen(
                             },
                         )
                     1 ->
-                        LeaderboardPage(
+                        leaderboardPage(
                             persons = persons,
                             isLoading = isLoading,
                             onDoubleTap = { badgeId ->
@@ -212,7 +204,7 @@ fun MainScreen(
             }
 
             if (adminExpanded) {
-                AdminMenu(
+                adminMenu(
                     isExpanded = adminExpanded,
                     onToggle = { adminExpanded = !adminExpanded },
                     onReset = {
@@ -239,7 +231,7 @@ fun MainScreen(
 
     when (val state = dialogState) {
         is DialogState.DoubleShot ->
-            DoubleDialog(
+            doubleDialog(
                 person = state.person,
                 onConfirm = {
                     viewModel.confirmDouble(
@@ -250,20 +242,20 @@ fun MainScreen(
                 onDismiss = { viewModel.dismissDialog() },
             )
         is DialogState.NameInput ->
-            NameInputDialog(
+            nameInputDialog(
                 onConfirm = { name ->
                     viewModel.registerNewPerson(state.badgeId, name)
                 },
                 onDismiss = { viewModel.dismissDialog() },
             )
         is DialogState.DeleteUser ->
-            DeleteUserDialog(
+            deleteUserDialog(
                 persons = persons,
                 onConfirm = { name -> viewModel.deleteUser(name) },
                 onDismiss = { viewModel.dismissDialog() },
             )
         is DialogState.ManualEdit ->
-            ManualEditDialog(
+            manualEditDialog(
                 persons = persons,
                 isExpertMode = isExpertMode,
                 onToggleExpertMode = { viewModel.toggleExpertMode() },
@@ -276,7 +268,7 @@ fun MainScreen(
 }
 
 @Composable
-private fun SummaryPage(
+private fun summaryPage(
     totalCount: Int,
     isLoading: Boolean,
     onTap: () -> Unit,
@@ -318,7 +310,7 @@ private fun SummaryPage(
 }
 
 @Composable
-private fun LeaderboardPage(
+private fun leaderboardPage(
     persons: List<com.lua.dsbcafe.data.model.Person>,
     isLoading: Boolean,
     onDoubleTap: (String) -> Unit,
@@ -353,7 +345,7 @@ private fun LeaderboardPage(
                     items = persons,
                     key = { it.badgeId },
                 ) { person ->
-                    PersonItem(
+                    personItem(
                         person = person,
                         onDoubleTap = { onDoubleTap(person.badgeId) },
                     )
