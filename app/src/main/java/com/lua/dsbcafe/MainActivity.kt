@@ -13,6 +13,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.firebase.FirebaseApp
 import com.lua.dsbcafe.auth.AuthManager
 import com.lua.dsbcafe.nfc.NfcManager
+import com.lua.dsbcafe.ui.screen.loginScreen
+import com.lua.dsbcafe.ui.screen.mainScreen
+import com.lua.dsbcafe.ui.theme.dsbCafeTheme
 import com.lua.dsbcafe.viewmodel.MainViewModel
 
 class MainActivity : ComponentActivity() {

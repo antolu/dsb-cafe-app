@@ -46,6 +46,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.lua.dsbcafe.ui.components.adminMenu
+import com.lua.dsbcafe.ui.components.dialogs.deleteUserDialog
+import com.lua.dsbcafe.ui.components.dialogs.doubleDialog
+import com.lua.dsbcafe.ui.components.dialogs.manualEditDialog
+import com.lua.dsbcafe.ui.components.dialogs.nameInputDialog
+import com.lua.dsbcafe.ui.components.personItem
 import com.lua.dsbcafe.viewmodel.DialogState
 import com.lua.dsbcafe.viewmodel.MainViewModel
 import com.lua.dsbcafe.viewmodel.UiMessage
